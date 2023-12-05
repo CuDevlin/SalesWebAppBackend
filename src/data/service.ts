@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import {Order} from "../entities/Order";
-import {OrderItem} from "../entities/OrderItem";
-import {Customer} from "../entities/Customer";
+import {Order} from "../entity/Order";
+import {OrderItem} from "../entity/OrderItem";
+import {Customer} from "../entity/Customer";
 
 export class DatabaseService {
     private static instance: DataSource;

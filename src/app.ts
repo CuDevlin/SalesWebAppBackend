@@ -1,12 +1,14 @@
-import { DatabaseService } from './database/service';
+import { DatabaseService } from './data/service';
 import express, { json } from 'express';
 import cors from 'cors';
+
 import {
     getCustomersRouter,
     getOrdersRouter,
     getRevenueRouter,
 } from './routes/GetSalesData';
-import { getJoinedTable } from './routes/GetJoinedQuery';
+
+import { getJoinedTable } from './routes/GetJoined';
 import { getTimeframe } from './routes/GetTimeframe';
 import { getStatistics } from './routes/GetStatistics';
 

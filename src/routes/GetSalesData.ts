@@ -1,8 +1,9 @@
 import express from "express";
-import {OrderItem} from "../entities/OrderItem";
-import {Order} from "../entities/Order";
-import {Customer} from "../entities/Customer";
-import {DatabaseService} from "../database/service";
+import {OrderItem} from "../entity/OrderItem";
+import {Order} from "../entity/Order";
+import {Customer} from "../entity/Customer";
+import {DatabaseService} from "../data/service";
+import {getRepository} from "typeorm";
 
 const router = express.Router();
 const connection = DatabaseService.getInstance()
@@ -10,17 +11,14 @@ const connection = DatabaseService.getInstance()
 
 router.get("/total/orders", async (req, res) => {
     try {
-        const orders = await connection
-            .createQueryBuilder()
-            .select("id")
-            .from(Order, "orders")
-            .getCount();
-
-        if (orders != 0) res.json(orders)
-        else res.status(404).send({msg: "No orders!"})
+        const orderRepository = getRepository(Order);
+        const ordersCount = await orderRepository.count();
+        
+        if (ordersCount != 0) res.json(ordersCount)
+        else res.status(404).send({msg: "No order data available!"})
     } catch
         (error) {
-        console.error("Error retrieving joined data:", error);
+        console.error("Error retrieving total order data:", error);
         res.status(500).json({error: "Internal Server Error"});
     }
 })
@@ -31,17 +29,19 @@ export {
 
 router.get("/total/revenue", async (req, res) => {
     try {
-        const revenue = await connection
+        const orderItemRepository = getRepository(OrderItem);
+        const revenueResult = await orderItemRepository
             .createQueryBuilder()
             .select("SUM(price)", "total")
-            .from(OrderItem, "orders_item")
             .getRawOne();
 
-        if (revenue.total != 0) res.json(parseInt(revenue.total));
-        else res.status(404).send({msg: "No revenue!"})
+        const totalRevenue = revenueResult.total || 0;
+
+        if (totalRevenue != 0) res.json(parseInt(totalRevenue));
+        else res.status(404).send({msg: "No Revenue Data Available!"})
     } catch
         (error) {
-        console.error("Error retrieving joined data:", error);
+        console.error("Error retrieving total revenue data:", error);
         res.status(500).json({error: "Internal Server Error"});
     }
 })
@@ -52,17 +52,15 @@ export {
 
 router.get("/total/customers", async (req, res) => {
     try {
-        const customers = await connection
-            .createQueryBuilder()
-            .select("*")
-            .from(Customer, "customer")
-            .getCount();
+        const customerRepository = getRepository(Customer);
+        const customersCount = await customerRepository.count();
 
-        if (customers != 0) res.json(customers)
-        else res.status(404).send({msg: "No customers!"})
+
+        if (customersCount != 0) res.json(customersCount)
+        else res.status(404).send({msg: "No Customer Data Available!"})
     } catch
         (error) {
-        console.error("Error retrieving joined data:", error);
+        console.error("Error retrieving total customer data:", error);
         res.status(500).json({error: "Internal Server Error"});
     }
 })
