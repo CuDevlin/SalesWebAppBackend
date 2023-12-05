@@ -6,7 +6,7 @@ import {
     getCustomersRouter,
     getOrdersRouter,
     getRevenueRouter,
-} from './routes/GetSalesData';
+} from './routes/GetSales';
 
 import { getJoinedTable } from './routes/GetJoined';
 import { getTimeframe } from './routes/GetTimeframe';
