@@ -1,15 +1,17 @@
 import express from "express";
-import { getRepository } from "typeorm";
+import { DatabaseService } from "../data/service";
 import { Order } from "../entity/Order";
 import { Customer } from "../entity/Customer"; 
 import { OrderItem } from "../entity/OrderItem"; 
 
 const router = express.Router();
+const dataSource = DatabaseService.getInstance();
 
 router.get("/joined", async (req, res) => {
     try {
-        const result = await getRepository(Order)
-            .createQueryBuilder("o")
+        const result = await dataSource
+            .getRepository(Order)
+            .createQueryBuilder('o')
             .select([
                 "o.id AS order_id",
                 "o.device",
@@ -28,11 +30,11 @@ router.get("/joined", async (req, res) => {
         if (result.length > 0) {
             res.json(result);
         } else {
-            res.status(404).send({ msg: "No sales found!" });
+            res.status(404).send({ msg: "No sales data found!" });
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Error Getting Joined Tables" });
     }
 });
 

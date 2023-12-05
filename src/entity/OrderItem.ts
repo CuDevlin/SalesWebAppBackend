@@ -7,7 +7,6 @@ export class OrderItem extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    //Same product has a same ean
     @Column({
         length: 13
     })

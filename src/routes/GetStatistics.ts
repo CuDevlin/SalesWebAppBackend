@@ -1,11 +1,10 @@
 import express from "express";
 import {DatabaseService} from "../data/service";
-import { getRepository, Between } from "typeorm";
 import { Order } from "../entity/Order"
 import { OrderItem } from "../entity/OrderItem";
 
 const router = express.Router();
-const connection = DatabaseService.getInstance();
+const dataSource = DatabaseService.getInstance();
 
 router.get("/statistics/:fromDate", async (req, res) => {
     try {
@@ -16,7 +15,8 @@ router.get("/statistics/:fromDate", async (req, res) => {
         toDateObj.setMonth(toDateObj.getMonth() + 1);
         toDateObj.setDate(toDateObj.getDate() - 1);
 
-        const result = await getRepository(OrderItem)
+        const result = await dataSource
+            .getRepository(OrderItem)
             .createQueryBuilder("oi")
             .select("TO_CHAR(o.purchaseDate, 'YYYY-MM-DD')", "purchaseDate")
             .addSelect("oi.price")
@@ -32,7 +32,7 @@ router.get("/statistics/:fromDate", async (req, res) => {
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);
-        res.status(500).json({error: "Internal Server Error"});
+        res.status(500).json({error: "Error Getting Statistics From Date"});
     }
 });
 
