@@ -30,7 +30,7 @@ router.get("/joined", async (req, res) => {
         if (result.length > 0) {
             res.json(result);
         } else {
-            res.status(404).send({ msg: "No sales data found!" });
+            res.status(404).json([]);
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);

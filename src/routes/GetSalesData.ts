@@ -16,7 +16,7 @@ router.get("/total/orders", async (req, res) => {
             .getCount();
 
         if (orders != 0) res.json(orders)
-        else res.status(404).send({ msg: "No orders data available!" })
+        else res.status(404).json([]);
     } catch
     (error) {
         console.error("Error retrieving joined data:", error);
@@ -37,7 +37,7 @@ router.get("/total/revenue", async (req, res) => {
             .getRawOne();
 
         if (revenue.total != 0) res.json(parseInt(revenue.total));
-        else res.status(404).send({ msg: "No revenue data available!" })
+        else res.status(404).json([]);
     } catch
     (error) {
         console.error("Error retrieving joined data:", error);
@@ -57,7 +57,7 @@ router.get("/total/customers", async (req, res) => {
             .getCount();
 
         if (customers != 0) res.json(customers)
-        else res.status(404).send({ msg: "No customers data available!" })
+        else res.status(404).json([]);
     } catch
     (error) {
         console.error("Error retrieving joined data:", error);

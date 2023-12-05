@@ -25,7 +25,7 @@ router.get("/timeframe", async (req, res) => {
         if (result.length > 0) {
             res.json(result);
         } else {
-            res.status(404).send({ msg: "Nothing found!" });
+            res.status(404).json([]);
         }
     } catch (error) {
         console.error("Error retrieving data within the timeframe:", error);

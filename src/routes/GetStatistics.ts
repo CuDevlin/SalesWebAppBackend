@@ -1,5 +1,5 @@
 import express from "express";
-import {DatabaseService} from "../data/service";
+import { DatabaseService } from "../data/service";
 import { Order } from "../entity/Order"
 import { OrderItem } from "../entity/OrderItem";
 
@@ -32,8 +32,8 @@ router.get("/statistics/:fromDate", async (req, res) => {
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);
-        res.status(500).json({error: "Error Getting Statistics From Date"});
+        res.status(500).json({ error: "Error Getting Statistics From Date" });
     }
 });
 
-export {router as getStatistics};
+export { router as getStatistics };
