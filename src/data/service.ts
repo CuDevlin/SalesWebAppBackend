@@ -11,12 +11,12 @@ export class DatabaseService {
     public static getInstance(): DataSource {
         if (!DatabaseService.instance) {
             DatabaseService.instance = new DataSource({
-                schema: "white_away_schema",
+                schema: "web_app_schema",
                 type: "postgres",
                 host: "localhost",
                 port: 5432,
                 username: "postgres",
-                password: "postgres",
+                password: "bobs",
                 database: "postgres",
                 entities: [Order, OrderItem, Customer],
                 synchronize: true
