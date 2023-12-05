@@ -8,7 +8,7 @@ export class Order extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "date", default: () => "CURRENT_DATE" })
+    @Column({ name: "purchaseDate", type: "date", default: () => "CURRENT_DATE" })
     purchaseDate: Date;
 
     @Column()

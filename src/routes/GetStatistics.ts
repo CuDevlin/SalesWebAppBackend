@@ -1,29 +1,28 @@
 import express from "express";
 import { DatabaseService } from "../data/service";
-import { Order } from "../entity/Order"
-import { OrderItem } from "../entity/OrderItem";
+import { addMonths, subDays } from "date-fns";
 
 const router = express.Router();
-const dataSource = DatabaseService.getInstance();
+const connection = DatabaseService.getInstance();
 
 router.get("/statistics/:fromDate", async (req, res) => {
     try {
         const { fromDate } = req.params;
 
-        const fromDateObj = new Date(`${fromDate}-01`);
-        const toDateObj = new Date(fromDateObj);
-        toDateObj.setMonth(toDateObj.getMonth() + 1);
-        toDateObj.setDate(toDateObj.getDate() - 1);
+        const fromDateObj = new Date((fromDate + "-01"));
+        const toDateObj = new Date(addMonths(fromDateObj, 1));
+        const finalToDateObj = subDays(toDateObj, 1);
 
-        const result = await dataSource
-            .getRepository(OrderItem)
-            .createQueryBuilder("oi")
-            .select("TO_CHAR(o.purchaseDate, 'YYYY-MM-DD')", "purchaseDate")
-            .addSelect("oi.price")
-            .innerJoin(Order, "o", "oi.orderId = o.id")
-            .where("o.purchaseDate BETWEEN :fromDate AND :toDate", { fromDate: fromDateObj, toDate: toDateObj })
-            .orderBy("purchaseDate")
-            .getRawMany();
+        const query = `
+            SELECT TO_CHAR(o."purchaseDate", 'YYYY-MM-DD') AS purchaseDate
+                 , oi.price
+            FROM web_app_schema.order o
+                     INNER JOIN web_app_schema.order_item oi ON oi."orderId" = o.id
+            WHERE o."purchaseDate" BETWEEN $1 AND $2
+            ORDER BY purchaseDate
+        `;
+
+        const result = await connection.query(query, [fromDateObj, finalToDateObj]);
 
         if (result.length > 0) {
             res.json(result);
@@ -32,7 +31,7 @@ router.get("/statistics/:fromDate", async (req, res) => {
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);
-        res.status(500).json({ error: "Error Getting Statistics From Date" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
