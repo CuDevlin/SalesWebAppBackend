@@ -6,11 +6,11 @@ import {
     getCustomersRouter,
     getOrdersRouter,
     getRevenueRouter,
-} from './routes/GetSales';
+} from './routes/Get_Sales';
 
-import { getJoinedTable } from './routes/GetJoined';
-import { getTimeframe } from './routes/GetTimeframe';
-import { getStatistics } from './routes/GetStatistics';
+import { getJoinedTable } from './routes/Get_Joined';
+import { getTimeframe } from './routes/Get_Timeframe';
+import { getStatistics } from './routes/Get_Statistics';
 
 const appExpress = express();
 const connection = DatabaseService.getInstance();
