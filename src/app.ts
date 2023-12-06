@@ -10,7 +10,7 @@ const main = async () => {
     await connection
         .initialize()
         .then(() => {
-            console.log('Data Source has been initialized!');
+            console.log('Data Source initialized!');
 
             // Enable CORS for all routes
             appExpress.use(cors());
