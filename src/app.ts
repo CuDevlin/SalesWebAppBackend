@@ -1,14 +1,7 @@
 import { DatabaseService } from './data/service';
 import express, { json } from 'express';
 import cors from 'cors';
-
-import {
-    getStatisticsRouter
-} from './routes/Get_Sales';
-
-import { getJoinedTable } from './routes/Get_Joined';
-import { getTimeframe } from './routes/Get_Timeframe';
-import { getStatistics } from './routes/Get_Statistics';
+import { mainRouter } from './routes/indexRouter';
 
 const appExpress = express();
 const connection = DatabaseService.getInstance();
@@ -23,10 +16,7 @@ const main = async () => {
             appExpress.use(cors());
 
             appExpress.use(json());
-            appExpress.use(getStatisticsRouter);
-            appExpress.use(getJoinedTable);
-            appExpress.use(getStatistics);
-            appExpress.use(getTimeframe);
+            appExpress.use(mainRouter);
 
             appExpress.listen(8080, () => {
                 console.log('Express app running on port:8080');
@@ -37,4 +27,4 @@ const main = async () => {
         });
 };
 
-main().then(() => {});
+main().then(() => { });
