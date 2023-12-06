@@ -29,5 +29,5 @@
     "baseUrl": "."
   },
   "exclude": ["node_modules", "jest.config.js", "./dist", "tests"],
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "src/routes/GetSales.test.ts"]
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "src/tests/get_sales_controller.test.ts"]
 }
