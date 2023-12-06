@@ -3,9 +3,7 @@ import express, { json } from 'express';
 import cors from 'cors';
 
 import {
-    getCustomersRouter,
-    getOrdersRouter,
-    getRevenueRouter,
+    getStatisticsRouter
 } from './routes/Get_Sales';
 
 import { getJoinedTable } from './routes/Get_Joined';
@@ -25,9 +23,7 @@ const main = async () => {
             appExpress.use(cors());
 
             appExpress.use(json());
-            appExpress.use(getOrdersRouter);
-            appExpress.use(getRevenueRouter);
-            appExpress.use(getCustomersRouter);
+            appExpress.use(getStatisticsRouter);
             appExpress.use(getJoinedTable);
             appExpress.use(getStatistics);
             appExpress.use(getTimeframe);
