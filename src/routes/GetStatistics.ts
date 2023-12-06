@@ -1,6 +1,8 @@
 import express from "express";
+import { Order } from "../entity/Order";
+import { OrderItem } from "../entity/OrderItem";
 import { DatabaseService } from "../data/service";
-import { addMonths, subDays } from "date-fns";
+import { addMonths, subDays, startOfMonth, endOfMonth } from "date-fns";
 
 const router = express.Router();
 const connection = DatabaseService.getInstance();
@@ -31,7 +33,34 @@ router.get("/statistics/:fromDate", async (req, res) => {
         }
     } catch (error) {
         console.error("Error retrieving joined data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Error Getting Joined Table Data" });
+    }
+});
+
+router.get("/total/revenue/:fromDate", async (req, res) => {
+    try {
+        const { fromDate } = req.params;
+
+        const fromDateObj = new Date(fromDate + "-01");
+        const startDate = startOfMonth(fromDateObj);
+        const endDate = endOfMonth(fromDateObj);
+
+        const result = await connection
+            .getRepository(Order)
+            .createQueryBuilder("o")
+            .innerJoin(OrderItem, "oi", 'oi."orderId" = o.id')
+            .select("SUM(oi.price) AS totalRevenue")
+            .where('o."purchaseDate" BETWEEN :startDate AND :endDate', { startDate, endDate })
+            .getRawOne();
+
+        if (result && result.totalRevenue !== null) {
+            res.json(result);
+        } else {
+            res.status(200).json({ totalRevenue: 0 });
+        }
+    } catch (error) {
+        console.error("Error retrieving total revenue:", error);
+        res.status(500).json({ error: "Error Getting Monthly Revenue" });
     }
 });
 

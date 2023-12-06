@@ -9,9 +9,9 @@ const dataSource = DatabaseService.getInstance();
 
 router.get("/timeframe", async (req, res) => {
     try {
-        let today = new Date(Date.now());
-        let toDate = subDays(today, today.getDate());
-        let fromDate = subDays(toDate, toDate.getDate() - 1);
+        const today = new Date(Date.now());
+        const toDate = subDays(today, today.getDate());
+        const fromDate = subDays(toDate, toDate.getDate() - 1);
 
         const result = await dataSource
             .getRepository(OrderItem)
