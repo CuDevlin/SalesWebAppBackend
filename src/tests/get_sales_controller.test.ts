@@ -4,7 +4,7 @@ import {
   getOrdersController,
   getRevenueController,
   getCustomersController,
-} from '../controllers/Get_Sales_Controller'; // Update with the correct path
+} from '../controllers/Get_Sales_Controller';
 
 const app: Express = express();
 

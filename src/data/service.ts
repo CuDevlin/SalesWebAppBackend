@@ -15,8 +15,8 @@ export class DatabaseService {
                 type: "postgres",
                 host: "localhost",
                 port: 5432,
-                username: "postgres",
-                password: "bobs",
+                username: "postgres", 
+                password: "bobs", //Future add secrect key to avoid exposing this data.
                 database: "postgres",
                 entities: [Order, OrderItem, Customer],
                 synchronize: true
